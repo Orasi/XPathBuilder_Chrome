@@ -1,0 +1,44 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ful="http://fulfillment.accommodation.transferobject.booking.dreams.wdw.com">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ful:changeRoom>
+         <request>
+            <newRoomNumber>4916</newRoomNumber>
+            <roomReadyStatus>false</roomReadyStatus>
+            <travelComponentId>1133955956</travelComponentId>
+            <locationId>51</locationId>
+            <comment>4916</comment>
+            <physicalRoomDetails>
+                <assignmentOwnerIds>126646310</assignmentOwnerIds>
+                <resourceId>4979</resourceId>
+                <roomNumber>4916</roomNumber>
+                <facilityId>80010385</facilityId>
+                <lockAssignment>true</lockAssignment>
+            </physicalRoomDetails>
+            <lockAssignment>true</lockAssignment>
+            <override>false</override>
+            <holdDone>false</holdDone>
+
+         </request>
+         <serviceContext>
+            <addressRole>?</addressRole>
+            <conversationId>?</conversationId>
+            <messageId>?</messageId>
+            <party1Id>?</party1Id>
+            <party1Type>?</party1Type>
+            <party2Id>?</party2Id>
+            <party2Type>?</party2Type>
+            <pathHostName>?</pathHostName>
+            <pathId>?</pathId>
+            <principalId>?</principalId>
+            <principalMethod>?</principalMethod>
+            <principalRole>?</principalRole>
+            <principalUri>?</principalUri>
+            <principalValue>?</principalValue>
+            <requestTimeStamp>?</requestTimeStamp>
+            <toAddressRole>?</toAddressRole>
+            <userName>?</userName>
+         </serviceContext>
+      </ful:changeRoom>
+   </soapenv:Body>
+</soapenv:Envelope>
