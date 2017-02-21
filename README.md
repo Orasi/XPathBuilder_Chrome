@@ -1,11 +1,10 @@
 
-# Disney - XML-to-XPath
+#XPathBuilder
 
 Chrome App to translate a XML file to Xpath and save it as Excel file.
 
 ## Screenshot
 ![screenshot](/assets/screenshot.png)
-![screenshot](/assets/chrome_app.png)
 
 =======
 # How to Install
