@@ -129,7 +129,7 @@ function traverseTree(tree) {
         		    var attrib = tree.childNodes[i].attributes[k];
         		    if(attrib.name.indexOf("xmlns") == -1 ){
 	        		    tableOutput = tableOutput +
-	                    '<tr><td><input value=\'' + tagName + '/\@\' + attrib.name + \'></input></td>' +
+	                    '<tr><td><input value=' + tagName + '/\@' + attrib.name + '></input></td>' +
 	                    '<td><input value=' + attrib.value + '></input></td></tr>';
 	        		    console.log( tagName + '/@' + attrib.name + " = " + "\"" +attrib.value + "\"")
         		    }
