@@ -19,7 +19,6 @@ Updated: Joe Marini (joemarini@google.com)
 
 var chosenEntry = null;
 var chooseFileButton = document.querySelector('#choose_file');
-var chooseDirButton = document.querySelector('#choose_dir');
 var saveFileButton = document.querySelector('#save_file');
 var xmlTable = document.querySelector('#xmlTable');
 var output = document.querySelector('output');
@@ -110,10 +109,6 @@ function waitForIO(writer, callback) {
   setTimeout(reentrant, 100);
 }
 
-function traverseNode(node) {
-  console.log(node.nodeName + ' : ' + node.nodeValue);
-}
-
 function traverseTree(tree) {
     if(tree.hasChildNodes()) {
       tagName = tagName + (tree.localName !== undefined ? '/' + tree.localName : '');
@@ -129,6 +124,17 @@ function traverseTree(tree) {
 
       if (nodes > 0) {
         for(var i=0; i < tree.childNodes.length; i++) {
+        	if(tree.childNodes[i].attributes != null && tree.childNodes[i].attributes != undefined){
+        		for (var k = 0; k < tree.childNodes[i].attributes.length; k++) {
+        		    var attrib = tree.childNodes[i].attributes[k];
+        		    if(attrib.name.indexOf("xmlns") == -1 ){
+	        		    tableOutput = tableOutput +
+	                    '<tr><td>' + tagName + '/@' + attrib.name + '</td>' +
+	                    '<td>' + attrib.value + '</td></tr>';
+	        		    console.log( tagName + '/@' + attrib.name + " = " + attrib.value);
+        		    }
+        		}
+        	}
         	 if ( tree.childNodes[i].nodeType == 2) {
                  console.log(tagName + ':' + tree.textContent);
                  tableOutput = tableOutput +
@@ -140,7 +146,7 @@ function traverseTree(tree) {
           } else {
         	 
         	  if (tree.childNodes.length == 1 && tree.childNodes[i].nodeType == 3) {
-              console.log(tagName + ':' + tree.textContent);
+              console.log(tagName + ' = ' + tree.textContent);
               tableOutput = tableOutput +
                 '<tr><td>' + tagName + '</td>' +
                 '<td>' + tree.textContent + '</td></tr>';
@@ -168,43 +174,12 @@ function loadFileEntry(_chosenEntry) {
       tagName = '';
       tableOutput = '';
       traverseTree(xmlFile);
-      xmlTable.innerHTML = tableOutput;
-      // var x = xmlFile.childNodes;
-      // textarea.value = result;
+      xmlTable.innerHTML = '<tr><th>Xpath</th><th>Value</th></tr>'+tableOutput;
     });
     // Update display.
     saveFileButton.disabled = false; // allow the user to save the content
     displayEntryData(chosenEntry);
   });
-}
-
-// for directories, read the contents of the top-level directory (ignore sub-dirs)
-// and put the results into the textarea, then disable the Save As button
-function loadDirEntry(_chosenEntry) {
-  chosenEntry = _chosenEntry;
-  if (chosenEntry.isDirectory) {
-    var dirReader = chosenEntry.createReader();
-    var entries = [];
-
-    // Call the reader.readEntries() until no more results are returned.
-    var readEntries = function() {
-       dirReader.readEntries (function(results) {
-        if (!results.length) {
-          textarea.value = entries.join("\n");
-          saveFileButton.disabled = true; // don't allow saving of the list
-          displayEntryData(chosenEntry);
-        }
-        else {
-          results.forEach(function(item) {
-            entries = entries.concat(item.fullPath);
-          });
-          readEntries();
-        }
-      }, errorHandler);
-    };
-
-    readEntries(); // Start reading dirs.
-  }
 }
 
 function loadInitialFile(launchData) {
@@ -246,57 +221,8 @@ chooseFileButton.addEventListener('click', function(e) {
   });
 });
 
-// chooseDirButton.addEventListener('click', function(e) {
-//   chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function(theEntry) {
-//     if (!theEntry) {
-//       output.textContent = 'No Directory selected.';
-//       return;
-//     }
-//     // use local storage to retain access to this file
-//     chrome.storage.local.set({'chosenFile': chrome.fileSystem.retainEntry(theEntry)});
-//     loadDirEntry(theEntry);
-//   });
-// });
-
 saveFileButton.addEventListener('click', function(e) {
   fnExcelReport();
-
-  // var config = {type: 'saveFile', suggestedName: chosenEntry.name};
-  // chrome.fileSystem.chooseEntry(config, function(writableEntry) {
-  //   var blob = new Blob([textarea.value], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'});
-  //   writeFileEntry(writableEntry, blob, function(e) {
-  //     output.textContent = 'Write complete :)';
-  //   });
-  // });
-});
-
-// Support dropping a single file onto this app.
-var dnd = new DnDFileController('body', function(data) {
-  chosenEntry = null;
-  for (var i = 0; i < data.items.length; i++) {
-    var item = data.items[i];
-    if (item.kind == 'file' &&
-        item.type.match('text/*') &&
-        item.webkitGetAsEntry()) {
-      chosenEntry = item.webkitGetAsEntry();
-      break;
-    }
-  };
-
-  if (!chosenEntry) {
-    output.textContent = "Sorry. That's not a text file.";
-    return;
-  }
-  else {
-    output.textContent = "";
-  }
-
-  readAsText(chosenEntry, function(result) {
-    textarea.value = result;
-  });
-  // Update display.
-  saveFileButton.disabled = false;
-  displayEntryData(chosenEntry);
 });
 
 loadInitialFile(launchData);
@@ -304,7 +230,7 @@ loadInitialFile(launchData);
 // Export to Excel
 function fnExcelReport()
 {
-    var tab_text="<table border='2px'><tr><td>Xpath</td><td>Value</td></tr>";
+    var tab_text="<table border='2px'>";
     var textRange; var j=0;
     tab = document.getElementById('xmlTable'); // id of table
 
