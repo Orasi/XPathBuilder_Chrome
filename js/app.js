@@ -131,7 +131,7 @@ function traverseTree(tree) {
 	        		    tableOutput = tableOutput +
 	                    '<tr><td><input value=\'' + tagName + '/\@\' + attrib.name + \'></input></td>' +
 	                    '<td><input value=' + attrib.value + '></input></td></tr>';
-	        		    console.log( tagName + '/@' + attrib.name + " = " + attrib.value.replace(/'/gi,"&#39;"))
+	        		    console.log( tagName + '/@' + attrib.name + " = " + "\"" +attrib.value + "\"")
         		    }
         		}
         	}
@@ -139,7 +139,7 @@ function traverseTree(tree) {
                  console.log(tagName + ':' + tree.textContent);
                  tableOutput = tableOutput +
                    '<tr><td><input value=' + tagName + '></input></td>' +
-                   '<td><input value=' + tree.textContent.replace(/'/gi,"&#39;") + '></input></td></tr>';
+                   '<td><input value=' + "\"" + tree.textContent + "\"" + '></input></td></tr>';
                }
           if (tree.children[i] !== null && tree.children[i] !== undefined) {
             traverseTree(tree.children[i]);
@@ -149,7 +149,7 @@ function traverseTree(tree) {
               console.log(tagName + ' = ' + tree.textContent);
               tableOutput = tableOutput +
                 '<tr><td><input value=' + tagName + '></input></td>' +
-                '<td><input value=' + tree.textContent.replace(/'/gi,"&#39;") + '></input></td></tr>';
+                '<td><input value=' + "\"" + tree.textContent + "\"" + '></input></td></tr>';
             }
         	  
             if (tree.children.length == i) {
