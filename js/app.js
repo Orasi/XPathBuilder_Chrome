@@ -117,9 +117,9 @@ function traverseTree(tree) {
     
       if (tree.childNodes.length != 1) {
         tableOutput = tableOutput +
-          '<tr><td>' + tagName + '</td>' +
+          '<tr><td><input value=' + tagName + '></td>' +
           '<td></td></tr>';
-        console.log(tagName);
+   //     console.log(tagName);
       }
 
       if (nodes > 0) {
@@ -129,27 +129,27 @@ function traverseTree(tree) {
         		    var attrib = tree.childNodes[i].attributes[k];
         		    if(attrib.name.indexOf("xmlns") == -1 ){
 	        		    tableOutput = tableOutput +
-	                    '<tr><td>' + tagName + '/@' + attrib.name + '</td>' +
-	                    '<td>' + attrib.value + '</td></tr>';
-	        		    console.log( tagName + '/@' + attrib.name + " = " + attrib.value);
+	                    '<tr><td><input value=\'' + tagName + '/\@\' + attrib.name + \'></input></td>' +
+	                    '<td><input value=' + attrib.value + '></input></td></tr>';
+	        		    console.log( tagName + '/@' + attrib.name + " = " + attrib.value)
         		    }
         		}
         	}
         	 if ( tree.childNodes[i].nodeType == 2) {
-                 console.log(tagName + ':' + tree.textContent);
+          //       console.log(tagName + ':' + tree.textContent);
                  tableOutput = tableOutput +
-                   '<tr><td>' + tagName + '</td>' +
-                   '<td>' + tree.textContent + '</td></tr>';
+                   '<tr><td><input value=' + tagName + '></input></td>' +
+                   '<td><input value=' + tree.textContent + '></input></td></tr>';
                }
           if (tree.children[i] !== null && tree.children[i] !== undefined) {
             traverseTree(tree.children[i]);
           } else {
         	 
         	  if (tree.childNodes.length == 1 && tree.childNodes[i].nodeType == 3) {
-              console.log(tagName + ' = ' + tree.textContent);
+        //      console.log(tagName + ' = ' + tree.textContent);
               tableOutput = tableOutput +
-                '<tr><td>' + tagName + '</td>' +
-                '<td>' + tree.textContent + '</td></tr>';
+                '<tr><td><input value=' + tagName + '></input></td>' +
+                '<td><input value=' + tree.textContent + '></input></td></tr>';
             }
         	  
             if (tree.children.length == i) {
@@ -170,6 +170,7 @@ function loadFileEntry(_chosenEntry) {
   chosenEntry.file(function(file) {
     readAsText(chosenEntry, function(result) {
       // Read result as xml thne display to table
+  //  	result=result.replace(/Disney's/gi,"Disney&aposs");
       var xmlFile = (new window.DOMParser()).parseFromString(result, "text/xml");
       tagName = '';
       tableOutput = '';
@@ -230,48 +231,44 @@ loadInitialFile(launchData);
 // Export to Excel
 function fnExcelReport()
 {
-    var tab_text="<table border='2px'>";
+    var tab_text="";
     var textRange; var j=0;
     tab = document.getElementById('xmlTable'); // id of table
 
-    for(j = 0 ; j < tab.rows.length ; j++)
+    for(j = 1 ; j < tab.rows.length ; j++)
     {
-        tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
-        //tab_text=tab_text+"</tr>";
+    	tempText='';
+    	tempText=tab.rows[j].cells[0].children[0].value+",";
+    	if(tab.rows[j].cells[1].children[0] != null){
+    		tempText=tempText+tab.rows[j].cells[1].children[0].value;
+    	}
+        //tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+    	console.log(tempText);
+    //	tab_text=tab_text+"\"" + tab.rows[j].cells[0].children[0].value+"\"," + "\""+ tab.rows[j].cells[1].children[0].value+ "\"" ;
+        tab_text=tab_text+tempText + "\r\n";
     }
 
-    tab_text=tab_text+"</table>";
-    tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-    tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-    tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+  //  tab_text=tab_text+"</table>";
+  //  tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+  //  tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+ //   tab_text= tab_text.replace(/<input value=\"|\"><\/input>/gi, ""); // reomves input params
+ //   tab_text= tab_text.replace(/">/gi, ""); // reomves input params
 
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
 
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-    {
-        txtArea1.document.open("txt/html","replace");
-        txtArea1.document.write(tab_text);
-        txtArea1.document.close();
-        txtArea1.focus();
-        sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
-    }
-    else   {              //other browser not tested on IE 11
-        // sa = window.open(
-        //   'data:application/vnd.ms-excel,' + encodeURIComponent(tab_text)
-        // );
-
+ 
       var link = document.getElementById('saveFile');
       if (typeof link.download === 'string') {
           // document.body.appendChild(link); // Firefox requires the link to be in the body
-          link.download = 'filename.xls';
-          link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tab_text);
+          link.download = 'filename.csv';
+          link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(tab_text);
           link.click();
           // document.body.removeChild(link); // remove the link when done
       } else {
           location.replace(uri);
       }
-    }
+    
 
     // return (sa);
 }
