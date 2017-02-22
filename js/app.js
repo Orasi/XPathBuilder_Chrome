@@ -116,10 +116,10 @@ function traverseNode(node) {
 
 function traverseTree(tree) {
     if(tree.hasChildNodes()) {
-      tagName = tagName + (tree.tagName !== undefined ? '/' + tree.tagName : '');
+      tagName = tagName + (tree.localName !== undefined ? '/' + tree.localName : '');
 
       var nodes = tree.childNodes.length;
-
+    
       if (tree.childNodes.length != 1) {
         tableOutput = tableOutput +
           '<tr><td>' + tagName + '</td>' +
@@ -129,15 +129,23 @@ function traverseTree(tree) {
 
       if (nodes > 0) {
         for(var i=0; i < tree.childNodes.length; i++) {
+        	 if ( tree.childNodes[i].nodeType == 2) {
+                 console.log(tagName + ':' + tree.textContent);
+                 tableOutput = tableOutput +
+                   '<tr><td>' + tagName + '</td>' +
+                   '<td>' + tree.textContent + '</td></tr>';
+               }
           if (tree.children[i] !== null && tree.children[i] !== undefined) {
             traverseTree(tree.children[i]);
           } else {
-            if (tree.childNodes.length == 1 && tree.childNodes[i].nodeType == 3) {
+        	 
+        	  if (tree.childNodes.length == 1 && tree.childNodes[i].nodeType == 3) {
               console.log(tagName + ':' + tree.textContent);
               tableOutput = tableOutput +
                 '<tr><td>' + tagName + '</td>' +
                 '<td>' + tree.textContent + '</td></tr>';
             }
+        	  
             if (tree.children.length == i) {
               var parts = tagName.split('/');
               tagName = parts.splice(0, parts.length - 1).join('/');
@@ -296,7 +304,7 @@ loadInitialFile(launchData);
 // Export to Excel
 function fnExcelReport()
 {
-    var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+    var tab_text="<table border='2px'><tr><td>Xpath</td><td>Value</td></tr>";
     var textRange; var j=0;
     tab = document.getElementById('xmlTable'); // id of table
 
