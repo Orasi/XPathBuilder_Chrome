@@ -115,13 +115,13 @@ function traverseTree(tree) {
 
       var nodes = tree.childNodes.length;
     
-      if (tree.childNodes.length != 1) {
+/*      if (tree.childNodes.length != 1) {
         tableOutput = tableOutput +
           '<tr><td><input value=' + tagName + '></td>' +
           '<td></td></tr>';
         console.log(tagName);
       }
-
+*/
       if (nodes > 0) {
         for(var i=0; i < tree.childNodes.length; i++) {
         	if(tree.childNodes[i].attributes != null && tree.childNodes[i].attributes != undefined){
