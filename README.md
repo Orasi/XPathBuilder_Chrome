@@ -1,5 +1,5 @@
 
-#XPathBuilder
+# XPathBuilder
 
 Chrome App to translate a XML file to Xpath and save it as Excel file.
 
