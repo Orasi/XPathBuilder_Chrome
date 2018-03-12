@@ -115,13 +115,6 @@ function traverseTree(tree) {
 
       var nodes = tree.childNodes.length;
     
-/*      if (tree.childNodes.length != 1) {
-        tableOutput = tableOutput +
-          '<tr><td><input value=' + tagName + '></td>' +
-          '<td></td></tr>';
-        console.log(tagName);
-      }
-*/
       if (nodes > 0) {
         for(var i=0; i < tree.childNodes.length; i++) {
         	if(tree.childNodes[i].attributes != null && tree.childNodes[i].attributes != undefined){
@@ -129,7 +122,7 @@ function traverseTree(tree) {
         		    var attrib = tree.childNodes[i].attributes[k];
         		    if(attrib.name.indexOf("xmlns") == -1 ){
 	        		    tableOutput = tableOutput +
-	                    '<tr><td><input value=' + tagName + '/\@' + attrib.name + '></input></td>' +
+	                    '<tr><td><input value=' + tagName + '/' + tree.childNodes[i].localName + '/\@' + attrib.name + '></input></td>' +
 	                    '<td><input value=' + attrib.value + '></input></td></tr>';
 	        		    console.log( tagName + '/@' + attrib.name + " = " + "\"" +attrib.value + "\"")
         		    }
@@ -242,17 +235,9 @@ function fnExcelReport()
     	if(tab.rows[j].cells[1].children[0] != null){
     		tempText=tempText+tab.rows[j].cells[1].children[0].value;
     	}
-        //tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
     	console.log(tempText);
-    //	tab_text=tab_text+"\"" + tab.rows[j].cells[0].children[0].value+"\"," + "\""+ tab.rows[j].cells[1].children[0].value+ "\"" ;
         tab_text=tab_text+tempText + "\r\n";
     }
-
-  //  tab_text=tab_text+"</table>";
-  //  tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-  //  tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
- //   tab_text= tab_text.replace(/<input value=\"|\"><\/input>/gi, ""); // reomves input params
- //   tab_text= tab_text.replace(/">/gi, ""); // reomves input params
 
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
@@ -260,15 +245,10 @@ function fnExcelReport()
  
       var link = document.getElementById('saveFile');
       if (typeof link.download === 'string') {
-          // document.body.appendChild(link); // Firefox requires the link to be in the body
           link.download = 'filename.csv';
           link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(tab_text);
           link.click();
-          // document.body.removeChild(link); // remove the link when done
       } else {
           location.replace(uri);
       }
-    
-
-    // return (sa);
 }
