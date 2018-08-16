@@ -8,8 +8,8 @@ body {
 }
 .dropping {
   background: #ffcc00;
-}
-nav {
+} 
+nav {  
 	display: -webkit-flex;
 	-webkit-justify-content: center;
 	-webkit-align-items: center;
@@ -85,14 +85,18 @@ th {
 </head>
 <body>
 
-<nav>
+<nav >
   <button id="choose_file">Choose File</button>
   <!-- <button id="choose_dir">Choose Directory</button> -->
+  <input name="searchtext" id="searchtext" type="text" size="30" maxlength="1000">
+  <button name="highlightbutton" id="highlightbutton" type="button">Highlight All</button>
+  <button name="displaybutton" id="displaybutton" type="button">Display Only</button>
+  <button name="resetbutton" id="resetbutton" type="button">Reset Display</button>
 </nav>
-
+<div  >
 XML File Path: <input type="text" id="file_path" readonly>
 <span>XML File Size: <span id="file_size"></span> bytes</span>
-
+</div>
 <output></output>
 
 <table style="width:100%">
@@ -113,6 +117,7 @@ XML File Path: <input type="text" id="file_path" readonly>
 <a href="#" id="saveFile" style="display:none" target="_blank">Save</a>
 <p><button id="save_file" disabled>Save</button></p>
 
-<script src="js/app.js"></script>
+<script src="js/app.js"></script>  
+<script src="js/jquery.min.js"></script>
 </body>
 </html>

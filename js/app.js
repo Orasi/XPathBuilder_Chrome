@@ -23,11 +23,58 @@ var saveFileButton = document.querySelector('#save_file');
 var xmlTable = document.querySelector('#xmlTable');
 var output = document.querySelector('output');
 var textarea = document.querySelector('textarea');
+var searchtext = document.querySelector('#searchtext');
+var highlightbutton = document.querySelector('#highlightbutton'); 
+var displaybutton = document.querySelector('#displaybutton'); 
+var resetbutton = document.querySelector('#resetbutton'); 
 
 function errorHandler(e) {
   console.error(e);
-}
+}  
 
+function highlightSearch() { 
+	  var v = searchtext.value.toLowerCase();
+	  var rows = xmlTable.getElementsByTagName("tr"); 
+	  for ( var i = 0; i < rows.length; i++ ) {
+	    var cells = rows[i].getElementsByTagName("td");
+	    if ( cells[0] != null && cells[0].tagName == "TD") {
+		  var text = cells[0].innerHTML.toLowerCase() + cells[1].innerHTML.toLowerCase();
+	      if ( v.length == 0 || (v.length < 3 && text.indexOf(v) == 0) || (v.length >= 3 && text.indexOf(v) > -1 ) ) {
+	        rows[i].style.backgroundColor = '#f00';   
+	    	  rows[i].style.display = "";
+	      } else {
+	        rows[i].style.backgroundColor = '#fff';  
+	      }
+	    }
+	  }
+}  
+function displaySearch() { 
+	  var v = searchtext.value.toLowerCase();
+	  var rows = xmlTable.getElementsByTagName("tr"); 
+	  for ( var i = 0; i < rows.length; i++ ) {
+	    var cells = rows[i].getElementsByTagName("td");
+	    if ( cells[0] != null && cells[0].tagName == "TD") {
+		  var text = cells[0].innerHTML.toLowerCase() + cells[1].innerHTML.toLowerCase();
+	      if ( v.length == 0 || (v.length < 3 && text.indexOf(v) == 0) || (v.length >= 3 && text.indexOf(v) > -1 ) ) {	        
+	    	  rows[i].style.display = "";
+	      } else { 
+	          rows[i].style.display = "none";
+	      }
+	    }
+	  }
+}  
+
+function resetSearch() { 
+	  var rows = xmlTable.getElementsByTagName("tr"); 
+	  for ( var i = 0; i < rows.length; i++ ) {
+	        rows[i].style.backgroundColor = '#fff'; 
+	    var cells = rows[i].getElementsByTagName("td");
+	    if ( cells[0] != null && cells[0].tagName == "TD") {
+		        rows[i].style.display = ""; 
+		        rows[i].style.backgroundColor = '#fff';  
+	    }
+	  }
+}  
 function displayEntryData(theEntry) {
   if (theEntry.isFile) {
     chrome.fileSystem.getDisplayPath(theEntry, function(path) {
@@ -198,6 +245,20 @@ function loadInitialFile(launchData) {
     });
   }
 }
+
+
+
+highlightbutton.addEventListener('click', function(e) {
+	highlightSearch();
+});
+
+displaybutton.addEventListener('click', function(e) {
+	displaySearch();
+});
+
+resetbutton.addEventListener('click', function(e) {
+	resetSearch();
+});
 
 chooseFileButton.addEventListener('click', function(e) {
   var accepts = [{
